@@ -1,6 +1,6 @@
 # stationVelibLive
 
-Simple R application showing in LIVE Paris bike status 
+Simple R application showing LIVE Paris bike station status 
 
 Using Open data Paris API (https://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/)
 
