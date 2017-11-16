@@ -1,8 +1,5 @@
-install.packages(c("httr", "jsonlite","magrittr"))
-install.packages("leaflet")
-install.packages("png")
+install.packages(c("httr", "jsonlite","magrittr","leaflet"))
 
-library(png)
 library(leaflet)
 library(httr)
 library(jsonlite)
@@ -11,7 +8,7 @@ library(magrittr)
 #begining of the refresh function 
 refresh <- function(){
 
-#---------------------------------------------------Get Data from open data paris API (https://opendata.paris.fr)
+#Get Data from open data paris API (https://opendata.paris.fr)
 velib_get  <- GET("https://opendata.paris.fr/api/records/1.0/search/?dataset=stations-velib-disponibilites-en-temps-reel&rows=300&facet=banking&facet=bonus&facet=status&facet=contract_name")
 
 #test
@@ -21,15 +18,14 @@ velib_get  <- GET("https://opendata.paris.fr/api/records/1.0/search/?dataset=sta
 
 #Get the content of the response
 text_content <- content(velib_get, as="text", encoding = "UTF-8")
-
 #parse with httr
 parsed_content <- content(velib_get, as="parsed")
 #names(parsed_content)
-
 json_content <- text_content %>% fromJSON
 velib <- json_content$records
 
-#---------------------------------------------------analysis
+#analysis
+
 #Feature Engineering to get a lattitude and longitude column 
 #------------lattitude & longitude
 
@@ -56,7 +52,7 @@ velib$fields[,1]
 
 velib$status <- velib$fields[,1]
 
-#---------------------------------------------------Plot MAP
+#Plot MAP
 #convert longitude and lattitude columns in numeric for leaflet plot 
 velib$longitude <- as.numeric(velib$longitude)
 velib$lattitude <- as.numeric(velib$lattitude)
@@ -87,7 +83,7 @@ getColor <- function(velib) {
 
 #assign each color to icons 
 icons <- awesomeIcons(
-  icon = 'ios-close',
+  icon = 'ion-android-bicycle',
   iconColor = 'black',
   library = 'ion',
   markerColor = getColor(velib)
@@ -99,9 +95,6 @@ leaflet(velib) %>% addTiles() %>%
   addMiniMap();
 } #end refresh function 
 
-
 #refresh map data 
 refresh()
-
-
 
