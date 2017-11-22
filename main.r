@@ -1,9 +1,11 @@
-install.packages(c("httr", "jsonlite","magrittr","leaflet"))
+install.packages(c("httr", "jsonlite","magrittr","leaflet", "stringi"))
 
-library(leaflet)
-library(httr)
-library(jsonlite)
-library(magrittr)
+library(leaflet)  #map plot 
+library(httr)     #API request 
+library(jsonlite) #parsing
+library(magrittr) #pipe codding 
+library(ggplot2)  #plot charts 
+library(stringi)  #sting manipulation
 
 #begining of the refresh function 
 refresh <- function(){
@@ -97,4 +99,36 @@ leaflet(velib) %>% addTiles() %>%
 
 #refresh map data 
 refresh()
+
+#------------------------------------------------------------------------------------
+
+#Interesting KPIs
+#1) number of station open/closed 
+
+#create a data frame for plotting 
+global_station_status <- as.data.frame(table(velib$status))
+#name the dataframe columns
+colnames(global_station_status) <- c("status","number_of_station")
+#plot using ggplot2
+ggplot(global_station_status, aes(x=status, y = number_of_station, fill= status)) + 
+  geom_bar(stat="identity") + 
+  theme_bw()
+
+#2) number of station open/closed by neighbourhood
+
+velibfulladdress <- velib$fields[,11]
+#cut the until the 5 integer 
+velibfulladdress_cut <- sub('*(\\d{5}).*', '\\1', velibfulladdress)
+#cut the last 5 characters in "velibfulladdress_cut" string 
+velib$postcode <- stri_sub(velibfulladdress_cut,-5,-1)
+#create a data frame for plotting 
+velib_status_by_postcode <- as.data.frame(table(velib$postcode, velib$status))
+#name the dataframe columns 
+colnames(velib_status_by_postcode) <- c("postcode","status","velib_station_number")
+#plot using ggplot2
+ggplot(velib_status_by_postcode, aes(x=postcode, y = velib_station_number, fill= status)) + 
+  geom_bar(stat="identity") + 
+  coord_flip() + 
+  theme_bw()
+
 
