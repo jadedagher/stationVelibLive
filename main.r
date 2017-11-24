@@ -126,7 +126,7 @@ velib_status_by_postcode <- as.data.frame(table(velib$postcode, velib$status))
 #name the dataframe columns 
 colnames(velib_status_by_postcode) <- c("postcode","status","velib_station_number")
 #plot using ggplot2
-ggplot(velib_status_by_postcode, aes(x=postcode, y = velib_station_number, fill= status)) + 
+ggplot(velib_status_by_postcode, aes(x=reorder(postcode, velib_station_number), y = velib_station_number, fill= status)) + 
   geom_bar(stat="identity") + 
   coord_flip() + 
   theme_bw()
