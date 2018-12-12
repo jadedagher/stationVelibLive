@@ -11,7 +11,7 @@ library(stringi)  #sting manipulation
 refresh <- function(){
 
 #Get Data from open data paris API (https://opendata.paris.fr)
-APIurl <- "https://opendata.paris.fr/api/records/1.0/search/?dataset=stations-velib-disponibilites-en-temps-reel&rows=5000&sort=-number&facet=banking&facet=bonus&facet=status&facet=contract_name"  
+APIurl <- "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&rows=1500"  
 velib_get  <- GET(APIurl)
 
 #test
@@ -163,7 +163,7 @@ plot_velib_station_by_postcode <- function(x){
   }
 }
 #function call with postcode in parameter
-plot_velib_station_by_postcode('92100')
+plot_velib_station_by_postcode('75005')
 
 
 #4) number total of bike and available bike by station by postcode
@@ -202,7 +202,7 @@ plot_velib_number_by_station_by_postcode <- function(x){
 }
 
 #function call with postcode in parameter
-plot_velib_number_by_station_by_postcode('75001')
+plot_velib_number_by_station_by_postcode('75002')
 
 
 
